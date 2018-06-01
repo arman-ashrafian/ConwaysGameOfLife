@@ -4,6 +4,7 @@ let GameOfLife = function (p) {
     let rows
     let cols
     let mousedown = 0
+    let running = true
 
     p.setup = () => {
         p.createCanvas(500, 500)
@@ -13,20 +14,42 @@ let GameOfLife = function (p) {
         grid = makeRandomGrid(rows, cols)
 
         let clearButton = document.getElementById('clearButton')
+        let stopButton = document.getElementById('stopStartButton')
         clearButton.addEventListener('click', () => {
             grid = makeEmptyGrid(rows, cols)
+        })
+        stopButton.addEventListener('click', () => {
+            if (running) {
+                stopButton.innerText = 'start'
+                stopButton.classList.remove('red')
+                stopButton.classList.add('blue')
+            } else {
+                stopButton.innerText = 'stop'
+                stopButton.classList.remove('blue')
+                stopButton.classList.add('red')
+            }
+            running = !running
         })
     }
 
     p.draw = () => {
         p.background('#455a64')
         drawGrid(grid)
-        updateGrid()
+        if(running) {
+            updateGrid()
+        }
     }
 
     p.mousePressed = () => {
-        console.log(p.mouseX)
-        console.log(p.mouseY)
+        let rowClicked
+        let colClicked
+        if(p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
+            // round down to nearest 10 & divide by scale
+            rowClicked = Math.floor((Math.floor(p.mouseY / 10) * 10)/scale)
+            colClicked = Math.floor((Math.floor(p.mouseX / 10) * 10)/scale)
+            
+            grid[rowClicked][colClicked] = 1
+        }
     }
 
     // creates 2D array filled with 1's & 0's
@@ -57,8 +80,8 @@ let GameOfLife = function (p) {
         let x, y
         for (let i = 0; i < grid.length; i++) {
             for (let j = 0; j < grid[i].length; j++) {
-                x = i * scale
-                y = j * scale
+                y = i * scale
+                x = j * scale
                 if (grid[i][j] === 1) {
                     p.fill('#2196f3')
                     p.rect(x, y, scale - 1, scale - 1)
