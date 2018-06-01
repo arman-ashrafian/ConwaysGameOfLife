@@ -67,8 +67,9 @@ let GameOfLife = function (p) {
             // round down to nearest 10 & divide by scale
             rowClicked = Math.floor((Math.floor(p.mouseY / 10) * 10)/scale)
             colClicked = Math.floor((Math.floor(p.mouseX / 10) * 10)/scale)
-            
-            grid[rowClicked][colClicked] = 1
+            // toggle grid location
+            grid[rowClicked][colClicked] = !grid[rowClicked][colClicked]
+            drawGrid(grid)
         }
     }
 
