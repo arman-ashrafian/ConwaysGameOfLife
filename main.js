@@ -1,19 +1,27 @@
 let GameOfLife = function (p) {
-    const scale = 20
+    let scale = 20
     let grid
     let rows
     let cols
     let mousedown = 0
     let running = true
     let generation = 0
+    let size = 500
 
     let generationElem = document.getElementById('generation')
     let clearButton = document.getElementById('clearButton')
     let stopButton = document.getElementById('stopStartButton')
     let stepButton = document.getElementById('stepButton')
     let randomButton = document.getElementById('randomButton')
+    let buttonRow = document.getElementsByClassName('buttonRow')[0]
+    console.log(buttonRow)
     p.setup = () => {
-        p.createCanvas(500, 500)
+        if (p.windowWidth < size) {
+            size = Math.round(p.windowWidth / 10) * 10 - 100
+            scale = 10
+        }
+
+        p.createCanvas(size, size)
 
         cols = p.width / scale
         rows = p.height / scale
@@ -47,6 +55,12 @@ let GameOfLife = function (p) {
         makeUnselectable(stopButton)
         makeUnselectable(stepButton)
         makeUnselectable(randomButton)
+
+        // makes buttons look pretty on mobile
+        if (p.windowWidth < 750) {
+            buttonRow.classList.remove('row')
+        }
+
     }
 
     p.draw = () => {
@@ -55,7 +69,7 @@ let GameOfLife = function (p) {
         generationElem.innerText = "Generation: " + generation
 
         drawGrid(grid)
-        if(running) {
+        if (running) {
             updateGrid()
         }
     }
@@ -63,12 +77,13 @@ let GameOfLife = function (p) {
     p.mousePressed = () => {
         let rowClicked
         let colClicked
-        if(p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
+        if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
             // round down to nearest 10 & divide by scale
-            rowClicked = Math.floor((Math.floor(p.mouseY / 10) * 10)/scale)
-            colClicked = Math.floor((Math.floor(p.mouseX / 10) * 10)/scale)
+            rowClicked = Math.floor((Math.floor(p.mouseY / 10) * 10) / scale)
+            colClicked = Math.floor((Math.floor(p.mouseX / 10) * 10) / scale)
             // toggle grid location
-            grid[rowClicked][colClicked] = !grid[rowClicked][colClicked]
+            let state = grid[rowClicked][colClicked]
+            grid[rowClicked][colClicked] = state ? 0 : 1
             drawGrid(grid)
         }
     }
@@ -231,15 +246,15 @@ let GameOfLife = function (p) {
     // Stack Overflow solution
     //https://stackoverflow.com/questions/880512/prevent-text-selection-after-double-click
     function makeUnselectable(elem) {
-        if (typeof(elem) == 'string')
-          elem = document.getElementById(elem);
+        if (typeof (elem) == 'string')
+            elem = document.getElementById(elem);
         if (elem) {
-          elem.onselectstart = function() { return false; };
-          elem.style.MozUserSelect = "none";
-          elem.style.KhtmlUserSelect = "none";
-          elem.unselectable = "on";
+            elem.onselectstart = function () { return false; };
+            elem.style.MozUserSelect = "none";
+            elem.style.KhtmlUserSelect = "none";
+            elem.unselectable = "on";
         }
-      }
+    }
 }
 
 var game = new p5(GameOfLife, 'sketch')

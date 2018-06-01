@@ -6,7 +6,6 @@
     <meta charset="utf-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-
     <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/0.6.1/p5.js"></script>
     <!-- Materialize -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0-beta/css/materialize.min.css">
@@ -19,6 +18,10 @@
             text-align: center;
             font-size: 36pt;
         }
+
+        .col.s2 > .btn {
+            width: 100%
+        }
     </style>
 </head>
 
@@ -30,19 +33,25 @@
         </div>
         <br>
 
-        <div class='row'>
-            <div class='col s6'>
-                <a id="clearButton" class="blue black-text btn">clear</a>
-                <a id="stopStartButton" class="red lighten-2 black-text btn">stop</a>
-                <a id="stepButton" class="green darken-1 black-text btn">step</a>
-                <a id="randomButton" class="cyan darken-1 black-text btn">random</a>
+        <div class='row buttonRow'>
+            <div class='col s2'>
+                <button id="clearButton" class="blue black-text btn">clear</button>
             </div>
-
-            <div class='col s6 right-align'>
+            <div class="col s2">
+                <button id="stopStartButton" class="red lighten-2 black-text btn">stop</button>
+            </div>
+            <div class="col s2">
+                <button id="stepButton" class="green darken-1 black-text btn">step</button>
+            </div>
+            <div class="col s2">
+                <button id="randomButton" class="cyan darken-1 black-text btn">random</button>
+            </div>
+                
+            <div class='col s4 right-align'>
                 <h5 id='generation'></h5>
             </div>
         </div>
-        <div id="wiki" class="flow-text">
+        <div id="wiki" class='flow-text'>
             <h3>Rules</h3>
             <p>The universe of the Game of Life is an infinite, two-dimensional orthogonal grid of square cells, each of which
                 is in one of two possible states, alive or dead, (or populated and unpopulated, respectively). Every cell
