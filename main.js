@@ -1,15 +1,21 @@
 let GameOfLife = function (p) {
-    const scale = 50
+    const scale = 20
     let grid
     let rows
     let cols
+    let mousedown = 0
 
     p.setup = () => {
-        p.createCanvas(800, 800)
+        p.createCanvas(500, 500)
 
         cols = p.width / scale
         rows = p.height / scale
-        grid = makeGrid(rows, cols)
+        grid = makeRandomGrid(rows, cols)
+
+        let clearButton = document.getElementById('clearButton')
+        clearButton.addEventListener('click', () => {
+            grid = makeEmptyGrid(rows, cols)
+        })
     }
 
     p.draw = () => {
@@ -18,13 +24,30 @@ let GameOfLife = function (p) {
         updateGrid()
     }
 
+    p.mousePressed = () => {
+        console.log(p.mouseX)
+        console.log(p.mouseY)
+    }
+
     // creates 2D array filled with 1's & 0's
-    function makeGrid(rows, cols) {
+    function makeRandomGrid(rows, cols) {
         let arr = new Array()
         for (let i = 0; i < rows; i++) {
             arr.push(new Array())
             for (let j = 0; j < cols; j++) {
                 arr[i].push(Math.floor(p.random(2)))
+            }
+        }
+        return arr
+    }
+
+    // creates 2D array filled with 1's & 0's
+    function makeEmptyGrid(rows, cols) {
+        let arr = new Array()
+        for (let i = 0; i < rows; i++) {
+            arr.push(new Array())
+            for (let j = 0; j < cols; j++) {
+                arr[i].push(0)
             }
         }
         return arr
