@@ -35,10 +35,10 @@ let GameOfLife = function (p) {
             if (running) {
                 stopButton.innerText = 'start'
                 stopButton.classList.remove('red')
-                stopButton.classList.add('blue')
+                stopButton.classList.add('green')
             } else {
                 stopButton.innerText = 'stop'
-                stopButton.classList.remove('blue')
+                stopButton.classList.remove('green')
                 stopButton.classList.add('red')
             }
             running = !running
@@ -60,7 +60,6 @@ let GameOfLife = function (p) {
         if (p.windowWidth < 750) {
             buttonRow.classList.remove('row')
         }
-
     }
 
     p.draw = () => {
