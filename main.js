@@ -5,7 +5,13 @@ let GameOfLife = function (p) {
     let cols
     let mousedown = 0
     let running = true
+    let generation = 0
 
+    let generationElem = document.getElementById('generation')
+    let clearButton = document.getElementById('clearButton')
+    let stopButton = document.getElementById('stopStartButton')
+    let stepButton = document.getElementById('stepButton')
+    let randomButton = document.getElementById('randomButton')
     p.setup = () => {
         p.createCanvas(500, 500)
 
@@ -13,10 +19,9 @@ let GameOfLife = function (p) {
         rows = p.height / scale
         grid = makeRandomGrid(rows, cols)
 
-        let clearButton = document.getElementById('clearButton')
-        let stopButton = document.getElementById('stopStartButton')
         clearButton.addEventListener('click', () => {
             grid = makeEmptyGrid(rows, cols)
+            generation = 0
         })
         stopButton.addEventListener('click', () => {
             if (running) {
@@ -30,10 +35,25 @@ let GameOfLife = function (p) {
             }
             running = !running
         })
+        stepButton.addEventListener('click', () => {
+            updateGrid()
+        })
+        randomButton.addEventListener('click', () => {
+            grid = makeRandomGrid(rows, cols)
+            generation = 0
+        })
+        // prevent double-click highlight
+        makeUnselectable(clearButton)
+        makeUnselectable(stopButton)
+        makeUnselectable(stepButton)
+        makeUnselectable(randomButton)
     }
 
     p.draw = () => {
         p.background('#455a64')
+
+        generationElem.innerText = "Generation: " + generation
+
         drawGrid(grid)
         if(running) {
             updateGrid()
@@ -138,6 +158,7 @@ let GameOfLife = function (p) {
                 }
             }
         }
+        generation++
     }
 
     function countNeighbors(row, col, g) {
@@ -205,6 +226,19 @@ let GameOfLife = function (p) {
         }
         return sum
     }
+
+    // Stack Overflow solution
+    //https://stackoverflow.com/questions/880512/prevent-text-selection-after-double-click
+    function makeUnselectable(elem) {
+        if (typeof(elem) == 'string')
+          elem = document.getElementById(elem);
+        if (elem) {
+          elem.onselectstart = function() { return false; };
+          elem.style.MozUserSelect = "none";
+          elem.style.KhtmlUserSelect = "none";
+          elem.unselectable = "on";
+        }
+      }
 }
 
 var game = new p5(GameOfLife, 'sketch')
