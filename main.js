@@ -1,12 +1,14 @@
 let GameOfLife = function (p) {
-    let scale = 20
     let grid
-    let rows
-    let cols
+    let rows, cols
+    let canvas
+
+    let mouseMotion = false
     let mousedown = 0
     let running = true
     let generation = 0
-    let size = 500
+    let size = 600
+    let scale = 10
 
     let generationElem = document.getElementById('generation')
     let clearButton = document.getElementById('clearButton')
@@ -14,14 +16,25 @@ let GameOfLife = function (p) {
     let stepButton = document.getElementById('stepButton')
     let randomButton = document.getElementById('randomButton')
     let buttonRow = document.getElementsByClassName('buttonRow')[0]
-    console.log(buttonRow)
     p.setup = () => {
         if (p.windowWidth < size) {
             size = Math.round(p.windowWidth / 10) * 10 - 100
             scale = 10
         }
 
-        p.createCanvas(size, size)
+        canvas = p.createCanvas(size, size)
+        canvas.mouseReleased(() => {
+            mouseMotion = false
+        })
+        canvas.mousePressed(() => {
+            mouseMotion = true
+            fillClickedGrid(true)
+        })
+        canvas.mouseMoved(() => {
+            if (mouseMotion) {
+                fillClickedGrid(false)
+            }
+        })
 
         cols = p.width / scale
         rows = p.height / scale
@@ -73,7 +86,7 @@ let GameOfLife = function (p) {
         }
     }
 
-    p.mousePressed = () => {
+    function fillClickedGrid(toggleOn) {
         let rowClicked
         let colClicked
         if (p.mouseX >= 0 && p.mouseX <= p.width && p.mouseY >= 0 && p.mouseY <= p.height) {
@@ -82,7 +95,11 @@ let GameOfLife = function (p) {
             colClicked = Math.floor((Math.floor(p.mouseX / 10) * 10) / scale)
             // toggle grid location
             let state = grid[rowClicked][colClicked]
-            grid[rowClicked][colClicked] = state ? 0 : 1
+            if (toggleOn) {
+                grid[rowClicked][colClicked] = state ? 0 : 1
+            } else {
+                grid[rowClicked][colClicked] = 1
+            }
             drawGrid(grid)
         }
     }
