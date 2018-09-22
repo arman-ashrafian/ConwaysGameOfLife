@@ -49,10 +49,12 @@ let GameOfLife = function (p) {
                 stopButton.innerText = 'start'
                 stopButton.classList.remove('red')
                 stopButton.classList.add('green')
+                M.toast({html: 'click cell to select', classes: 'rounded'})
             } else {
                 stopButton.innerText = 'stop'
                 stopButton.classList.remove('green')
                 stopButton.classList.add('red')
+                M.Toast.dismissAll()
             }
             running = !running
         })
